@@ -21,8 +21,8 @@
         "rgb_matrix": true
     },
     "rgb_matrix": {
-        "driver": "IS31FL3741",
-        "max_brightness": 200,
+        "driver": "is31fl3741",
+        "max_brightness": 128,
         "animations": {
             "solid_color": true,
             "alphas_mods": true,
@@ -88,7 +88,7 @@
                 {"matrix": [0, 10], "x":10, "y":0},
                 {"matrix": [0, 11], "x":11, "y":0},
                 {"matrix": [0, 12], "x":12, "y":0},
-                {"matrix": [2, 12], "x":13, "y":0},
+                {"matrix": [1, 13], "x":13, "y":0},
                 {"matrix": [0, 13], "x":14, "y":0},
                 {"matrix": [0, 14], "x":15, "y":0},
                 {"matrix": [1, 0], "x":0, "y":1, "w":1.5},
@@ -104,7 +104,7 @@
                 {"matrix": [1, 10], "x":10.5, "y":1},
                 {"matrix": [1, 11], "x":11.5, "y":1},
                 {"matrix": [1, 12], "x":12.5, "y":1},
-                {"matrix": [1, 13], "x":13.5, "y":1, "w":1.5},
+                {"matrix": [2, 12], "x":13.5, "y":1, "w":1.5},
                 {"matrix": [1, 14], "x":15, "y":1},
                 {"matrix": [2, 0], "x":0, "y":2, "w":1.75},
                 {"matrix": [2, 1], "x":1.75, "y":2},
