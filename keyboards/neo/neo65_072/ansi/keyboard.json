@@ -1,32 +1,79 @@
 {
-    "keyboard_name": "NEO65 Solder",
+    "keyboard_name": "NEO65 ANSI",
     "manufacturer":"NEO Studio",
     "url": "",
     "maintainer": "NEO Studio",
     "usb": {
         "vid": "0x4E45",
-        "pid": "0x3653",
+        "pid": "0x3635",
         "device_version": "0.0.1"
     },
     "matrix_pins": {
-        "cols": ["A6", "A7", "B0", "B1", "B2", "B11", "B10", "B12", "B13", "B14", "B15", "A8", "A9", "A10", "A15" ],
-        "rows": [ "A1", "A2", "A3", "A4", "A5"]
+        "cols": ["A7", "B0", "B1", "B2", "B10", "B11", "B12", "B13", "B14", "B15", "A8", "A9", "A10", "A15", "B4" ],
+        "rows": [ "A2", "A3", "A5", "A4", "A6" ]
     },
     "diode_direction": "COL2ROW",
     "features": {
         "bootmagic": true,
         "extrakey": true,
-        "mousekey": true,
-        "nkro": true
+        "mousekey": false,
+        "nkro": true,
+        "rgb_matrix": true
     },
-    "indicators": {
-        "caps_lock": "C14",
-        "on_state": 0
+    "rgb_matrix": {
+        "driver": "is31fl3741",
+        "max_brightness": 128,
+        "animations": {
+            "solid_color": true,
+            "alphas_mods": true,
+            "gradient_up_down": true,
+            "gradient_left_right": true,
+            "breathing": true,
+            "band_sat": true,
+            "band_val": true,
+            "band_pinwheel_sat": true,
+            "band_pinwheel_val": true,
+            "band_spiral_sat": true,
+            "band_spiral_val": true,
+            "cycle_all": true,
+            "cycle_left_right": true,
+            "cycle_up_down": true,
+            "cycle_out_in": true,
+            "cycle_out_in_dual": true,
+            "rainbow_moving_chevron": true,
+            "cycle_pinwheel": true,
+            "cycle_spiral": true,
+            "dual_beacon": true,
+            "rainbow_beacon": true,
+            "rainbow_pinwheels": true,
+            "raindrops": true,
+            "jellybean_raindrops": true,
+            "hue_breathing": true,
+            "hue_pendulum": true,
+            "hue_wave": true,
+            "pixel_fractal": true,
+            "pixel_flow": true,
+            "pixel_rain": true,
+            "typing_heatmap": true,
+            "digital_rain": true,
+            "solid_reactive_simple": true,
+            "solid_reactive": true,
+            "solid_reactive_wide": true,
+            "solid_reactive_multiwide": true,
+            "solid_reactive_cross": true,
+            "solid_reactive_multicross": true,
+            "solid_reactive_nexus": true,
+            "solid_reactive_multinexus": true,
+            "splash": true,
+            "multisplash": true,
+            "solid_splash": true,
+            "solid_multisplash": true
+        }
     },
-    "processor": "STM32F103",
-    "board": "STM32_F103_STM32DUINO",
+    "processor": "STM32F072",
+    "bootloader": "stm32-dfu",
     "layouts": {
-        "LAYOUT": {
+        "LAYOUT_hot": {
             "layout": [
                 {"matrix": [0, 0], "x":0, "y":0},
                 {"matrix": [0, 1], "x":1, "y":0},
@@ -73,8 +120,7 @@
                 {"matrix": [2, 11], "x":11.75, "y":2},
                 {"matrix": [2, 13], "x":12.75, "y":2, "w":2.25},
                 {"matrix": [2, 14], "x":15, "y":2},
-                {"matrix": [3, 0], "x":0, "y":3, "w":1.25},
-                {"matrix": [4, 3], "x":1.25, "y":3},
+                {"matrix": [3, 0], "x":0, "y":3, "w":2.25},
                 {"matrix": [3, 1], "x":2.25, "y":3},
                 {"matrix": [3, 2], "x":3.25, "y":3},
                 {"matrix": [3, 3], "x":4.25, "y":3},
@@ -85,7 +131,7 @@
                 {"matrix": [3, 8], "x":9.25, "y":3},
                 {"matrix": [3, 9], "x":10.25, "y":3},
                 {"matrix": [3, 10], "x":11.25, "y":3},
-                {"matrix": [3, 12], "x":12.25, "y":3, "w":1.75},
+                {"matrix": [3, 11], "x":12.25, "y":3, "w":1.75},
                 {"matrix": [3, 13], "x":14, "y":3},
                 {"matrix": [3, 14], "x":15, "y":3},
                 {"matrix": [4, 0], "x":0, "y":4, "w":1.25},
