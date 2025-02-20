@@ -82,13 +82,16 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 
-        case KC_4:
-            if (get_mods() == MOD_BIT(KC_LALT)) {
-                if (record->event.pressed) {
-                    tap_code16(LALT(KC_F4));
-                }
+        case KC_1 ... KC_0:  // Numbers 1-0 
+            if ((get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) == (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) {
+                tap_code16(KC_F1 + (keycode - KC_1));    // Convert number to F-key
                 return false;
-            }
+            } else if (get_mods() == MOD_BIT(KC_LALT)) {
+                        if (record->event.pressed) {
+                            tap_code16(LALT(KC_F4));
+                        }
+                        return false;
+                    }
             return true;
 
         case TG_DBG:
