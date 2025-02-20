@@ -86,7 +86,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if ((get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) == (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) {
                 tap_code16(KC_F1 + (keycode - KC_1));    // Convert number to F-key
                 return false;
-            } else if (get_mods() == MOD_BIT(KC_LALT)) {
+            } else if (get_mods() == MOD_BIT(KC_LALT) && keycode == KC_4) {
                         if (record->event.pressed) {
                             tap_code16(LALT(KC_F4));
                         }
