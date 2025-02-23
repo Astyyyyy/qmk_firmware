@@ -103,6 +103,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
     }
 
+    if (keycode == KC_AUDIO_VOL_DOWN || keycode == KC_AUDIO_VOL_UP) {
+        if (record->event.pressed) {
+            uprintf("VOL DOWN/UP: %u\n", keycode);
+            last_keycode = keycode;
+            repeat_timer = timer_read();
+            hold_timer = timer_read();
+            is_repeating = true;
+        } else {
+            is_repeating = false;
+            last_keycode = 0;
+            hold_timer = 0;
+        }
+    }
+
     switch (keycode) {
 
         case KC_1 ... KC_0:  // Numbers 1-0 
@@ -219,7 +233,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void matrix_scan_user(void) {
     if (is_repeating && last_keycode != 0) {
-        if (get_mods() & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL))) {
+        if ((get_mods() & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL))) || last_keycode == KC_AUDIO_VOL_DOWN || keycode == KC_AUDIO_VOL_UP) {
             uint16_t hold_time = timer_elapsed(hold_timer);
             uint16_t delay = 200 - ((hold_time > 2000 ? 150 : (150 * hold_time) / 2000));
             if (timer_elapsed(repeat_timer) > delay) {
