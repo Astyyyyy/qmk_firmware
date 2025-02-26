@@ -86,8 +86,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-    // Check for Ctrl + any key repetition
-    bool ctrl_active = get_mods() & (MOD_BIT(KC_LCTL));
+    //Check for Ctrl + any key repetition
+    bool ctrl_active = get_mods() & (MOD_BIT(KC_LCTL) & (!MOD_BIT(KC_LALT)));
     if (ctrl_active && keycode != KC_LCTL && keycode != KC_LSFT) {
         if (record->event.pressed) {
             uprintf("Ctrl pressed with keycode: %u\n", keycode);
@@ -233,7 +233,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void matrix_scan_user(void) {
     if (is_repeating && last_keycode != 0) {
-        if ((get_mods() & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL))) || last_keycode == KC_AUDIO_VOL_DOWN || keycode == KC_AUDIO_VOL_UP) {
+        if ((get_mods() & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL))) || last_keycode == KC_AUDIO_VOL_DOWN || last_keycode == KC_AUDIO_VOL_UP) {
             uint16_t hold_time = timer_elapsed(hold_timer);
             uint16_t delay = 200 - ((hold_time > 2000 ? 150 : (150 * hold_time) / 2000));
             if (timer_elapsed(repeat_timer) > delay) {
