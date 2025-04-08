@@ -87,8 +87,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     //Check for Ctrl + any key repetition
-    bool ctrl_active = get_mods() & (MOD_BIT(KC_LCTL) & (!MOD_BIT(KC_LALT)));
-    if (ctrl_active && keycode != KC_LCTL && keycode != KC_LSFT) {
+    bool ctrl_active = (get_mods() == (MOD_BIT(KC_LCTL)));
+    if (ctrl_active && keycode != KC_LALT && keycode != KC_LSFT) {
         if (record->event.pressed) {
             uprintf("Ctrl pressed with keycode: %u\n", keycode);
             last_keycode = keycode;
