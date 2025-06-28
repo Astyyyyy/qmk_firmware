@@ -20,13 +20,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum custom_keycodes {
     TG_NUL = SAFE_RANGE,
     TG_DBG = SAFE_RANGE + 1,
+    SHIFT_SPAM = SAFE_RANGE + 2,
+    MOUSE_RIGHT_CLICK = SAFE_RANGE + 3,
 };
 
 static bool TOGGLE_NULL = true;
 
+static bool TOGGLE_MOUSE_RIGHT_CLICK = false;
+
 static bool TOGGLE_DEBUG = false;
 
 static bool a_held, d_held, a_scrip, d_scrip = 0;
+
+static bool TOGGLE_SHIFT_SPAM = false;
+static bool shift_pressed = false;
+uint16_t shift_spam_timer = 0;
 
 static uint16_t repeat_timer = 0;
 static uint16_t hold_timer = 0;
@@ -46,8 +54,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[1] = LAYOUT_hot(
 		KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_TRNS, TG_DBG, TG_NUL,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INSERT, KC_MPRV,
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, NK_TOGG, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS, KC_MPLY,
-		KC_TRNS,          RGB_TOG, RGB_MOD, RGB_RMOD,RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_TRNS, KC_TRNS, KC_PRINT_SCREEN, KC_MNXT,
+		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, NK_TOGG, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MOUSE_RIGHT_CLICK,          KC_TRNS, KC_MPLY,
+		KC_TRNS,          RGB_TOG, RGB_MOD, RGB_RMOD,RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, SHIFT_SPAM, KC_TRNS, KC_PRINT_SCREEN, KC_MNXT,
 		KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_RCTL, KC_TRNS,          KC_AUDIO_VOL_DOWN, KC_HOME, KC_AUDIO_VOL_UP     
 	)//
 };
@@ -78,6 +86,18 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     } else {
     RGB_MATRIX_INDICATOR_SET_COLOR(13, 0xFF, 0xFF, 0xFF);
     RGB_MATRIX_INDICATOR_SET_COLOR(14, 0xFF, 0xFF, 0xFF);
+    }
+
+    if (TOGGLE_MOUSE_RIGHT_CLICK) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(42, 0x80, 0x00, 0x80);
+    } else {
+        RGB_MATRIX_INDICATOR_SET_COLOR(42, 0xFF, 0xFF, 0xFF);
+    }
+
+    if (TOGGLE_SHIFT_SPAM) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(55, 0x80, 0x00, 0x80);
+    } else {
+        RGB_MATRIX_INDICATOR_SET_COLOR(55, 0xFF, 0xFF, 0xFF);
     }
     return false;
 }
@@ -118,6 +138,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
+
+        case SHIFT_SPAM:
+            if (record->event.pressed) {
+                TOGGLE_SHIFT_SPAM = !TOGGLE_SHIFT_SPAM;
+                uprintf("TOGGLE_SHIFT_SPAM is now: %d\n", TOGGLE_SHIFT_SPAM);
+                if (TOGGLE_SHIFT_SPAM) {
+                    shift_spam_timer = timer_read();
+                }
+            }
+            return false;
+
+        case MOUSE_RIGHT_CLICK:
+            if (record->event.pressed) {
+                TOGGLE_MOUSE_RIGHT_CLICK = !TOGGLE_MOUSE_RIGHT_CLICK;
+                uprintf("TOGGLE_MOUSE_RIGHT_CLICK is now: %d\n", TOGGLE_MOUSE_RIGHT_CLICK);
+                if (TOGGLE_MOUSE_RIGHT_CLICK) {
+                    register_code(KC_MS_BTN2);
+                } else if (!TOGGLE_MOUSE_RIGHT_CLICK) {
+                    unregister_code(KC_MS_BTN2);
+                }
+            }
+            return false;
 
         case KC_1 ... KC_0:  // Numbers 1-0 
             if ((get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) == (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) {
@@ -245,5 +287,21 @@ void matrix_scan_user(void) {
             last_keycode = 0;
             hold_timer = 0;
         }
+    }
+
+    if (TOGGLE_SHIFT_SPAM) {
+        if (!shift_pressed && timer_elapsed(shift_spam_timer) > 75) {
+            register_code(KC_LSFT);
+            shift_spam_timer = timer_read();
+            shift_pressed = true;
+        } else if (shift_pressed && timer_elapsed(shift_spam_timer) > 50) {
+            unregister_code(KC_LSFT);
+            shift_spam_timer = timer_read();
+            shift_pressed = false;
+        }
+    } else if (shift_pressed) {
+        // If toggled off while still holding, release shift
+        unregister_code(KC_LSFT);
+        shift_pressed = false;
     }
 }
