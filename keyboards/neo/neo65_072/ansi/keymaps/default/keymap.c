@@ -106,6 +106,24 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
+    bool in_fn_layer = (layer_state & (1UL << 1));
+    bool rshift_active = (get_mods() == MOD_BIT(KC_RSFT));
+
+    if (in_fn_layer && rshift_active) {
+        if (keycode >= KC_F1 && keycode <= KC_F10) {
+            if (record->event.pressed) {
+                uint16_t num_key = KC_1 + (keycode - KC_F1); // Convert F-key to number
+                if (keycode == KC_F10) num_key = KC_0;
+                register_code(num_key);
+            } else {
+                // Handle key release
+                uint16_t num_key = KC_1 + (keycode - KC_F1);
+                if (keycode == KC_F10) num_key = KC_0;
+                unregister_code(num_key);
+            }
+            return false;
+        }
+    }
     //Check for Ctrl + any key repetition
     bool ctrl_active = (get_mods() == (MOD_BIT(KC_LCTL)));
     if (ctrl_active && keycode != KC_LALT && keycode != KC_LSFT) {
