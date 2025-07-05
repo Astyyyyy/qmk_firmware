@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright 2023 NEO
 
 This program is free software: you can redistribute it and/or modify
@@ -36,18 +36,13 @@ static bool TOGGLE_SHIFT_SPAM = false;
 static bool shift_pressed = false;
 uint16_t shift_spam_timer = 0;
 
-static uint16_t repeat_timer = 0;
-static uint16_t hold_timer = 0;
-static uint16_t last_keycode = 0;
-static bool is_repeating = false;
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	[0] = LAYOUT_hot(
-		KC_ESC,  KC_1,    KC_2,    KC_3,   KC_4,     KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_BSPC, KC_DEL,   
-		KC_TAB,  KC_Q,    KC_W,    KC_E,   KC_R,     KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_PGUP,  
-		KC_CAPS, KC_A,    KC_S,    KC_D,   KC_F,     KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGDN, 
-		KC_LSFT,          KC_Z,    KC_X,   KC_C,     KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_UP,   KC_END, 
+		KC_ESC,  KC_1,    KC_2,    KC_3,   KC_4,     KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_BSPC, KC_DEL,
+		KC_TAB,  KC_Q,    KC_W,    KC_E,   KC_R,     KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_PGUP,
+		KC_CAPS, KC_A,    KC_S,    KC_D,   KC_F,     KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGDN,
+		KC_LSFT,          KC_Z,    KC_X,   KC_C,     KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_UP,   KC_END,
 		KC_LCTL, KC_LGUI, KC_LALT,                   KC_SPC,                             KC_RALT, MO(1),            KC_LEFT, KC_DOWN, KC_RIGHT
 	),
 
@@ -56,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INSERT, KC_MPRV,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, NK_TOGG, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MOUSE_RIGHT_CLICK,          KC_TRNS, KC_MPLY,
 		KC_TRNS,          RGB_TOG, RGB_MOD, RGB_RMOD,RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, SHIFT_SPAM, KC_TRNS, KC_PRINT_SCREEN, KC_MNXT,
-		KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_RCTL, KC_TRNS,          KC_AUDIO_VOL_DOWN, KC_HOME, KC_AUDIO_VOL_UP     
+		KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_RCTL, KC_TRNS,          KC_AUDIO_VOL_DOWN, KC_HOME, KC_AUDIO_VOL_UP
 	)//
 };
 
@@ -124,36 +119,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
     }
-    //Check for Ctrl + any key repetition
-    bool ctrl_active = (get_mods() == (MOD_BIT(KC_LCTL)));
-    if (ctrl_active && keycode != KC_LALT && keycode != KC_LSFT) {
-        if (record->event.pressed) {
-            uprintf("Ctrl pressed with keycode: %u\n", keycode);
-            last_keycode = keycode;
-            repeat_timer = timer_read();
-            hold_timer = timer_read();
-            is_repeating = true;
-        } else {
-            uprintf("Key released: %u\n", keycode);
-            is_repeating = false;
-            last_keycode = 0;
-            hold_timer = 0;
-        }
-    }
-
-    if (keycode == KC_AUDIO_VOL_DOWN || keycode == KC_AUDIO_VOL_UP) {
-        if (record->event.pressed) {
-            uprintf("VOL DOWN/UP: %u\n", keycode);
-            last_keycode = keycode;
-            repeat_timer = timer_read();
-            hold_timer = timer_read();
-            is_repeating = true;
-        } else {
-            is_repeating = false;
-            last_keycode = 0;
-            hold_timer = 0;
-        }
-    }
 
     switch (keycode) {
 
@@ -179,7 +144,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
-        case KC_1 ... KC_0:  // Numbers 1-0 
+        case KC_1 ... KC_0:  // Numbers 1-0
             if ((get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) == (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL))) {
                 tap_code16(KC_F1 + (keycode - KC_1));    // Convert number to F-key
                 return false;
@@ -292,20 +257,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void matrix_scan_user(void) {
-    if (is_repeating && last_keycode != 0) {
-        if ((get_mods() & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL))) || last_keycode == KC_AUDIO_VOL_DOWN || last_keycode == KC_AUDIO_VOL_UP) {
-            uint16_t hold_time = timer_elapsed(hold_timer);
-            uint16_t delay = 200 - ((hold_time > 2000 ? 150 : (150 * hold_time) / 2000));
-            if (timer_elapsed(repeat_timer) > delay) {
-                tap_code(last_keycode);
-                repeat_timer = timer_read();
-            }
-        } else {
-            is_repeating = false;
-            last_keycode = 0;
-            hold_timer = 0;
-        }
-    }
 
     if (TOGGLE_SHIFT_SPAM) {
         if (!shift_pressed && timer_elapsed(shift_spam_timer) > 75) {
