@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright 2023 NEO
 
 This program is free software: you can redistribute it and/or modify
@@ -31,15 +31,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_TIMINGR_SCLH 0x03U
 #define I2C1_TIMINGR_SCLL 0x09U
 
-#    define RGB_DISABLE_AFTER_TIMEOUT 0 // number of ticks to wait until disabling effects
-#    define RGB_DISABLE_WHEN_USB_SUSPENDED  // turn off effects when suspended
-#    define RGB_MATRIX_KEYPRESSES           // reacts to keypresses
+#    define RGB_MATRIX_TIMEOUT 0 // number of milliseconds to wait until rgb automatically turns off
+#    define RGB_MATRIX_SLEEP  // turn off effects when suspended
+#    define RGB_MATRIX_KEYRELEASES           // reacts to keypresses
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #    define RGB_MATRIX_LED_PROCESS_LIMIT  4
 #    define RGB_MATRIX_LED_FLUSH_LIMIT    26
-#    define RGB_MATRIX_STARTUP_VAL        64
+#    define RGB_MATRIX_DEFAULT_VAL        64 // Sets the default brightness value,
 #    define IS31FL3741_I2C_ADDRESS_1      0b0110000
 #    define IS31FL3741_DRIVER_COUNT       1
-#    define RGB_MATRIX_LED_COUNT          68   //DRIVER_LED_TOTAL              //RGB_MATRIX_LED_COUNT 
+#    define RGB_MATRIX_LED_COUNT          68   //DRIVER_LED_TOTAL              //RGB_MATRIX_LED_COUNT
 
 #endif
