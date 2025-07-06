@@ -76,11 +76,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if (TOGGLE_DEBUG) {
-    RGB_MATRIX_INDICATOR_SET_COLOR(13, 0x80, 0x00, 0x80);
-    RGB_MATRIX_INDICATOR_SET_COLOR(14, 0x80, 0x00, 0x80);
+        RGB_MATRIX_INDICATOR_SET_COLOR(13, 0x80, 0x00, 0x80);
+        RGB_MATRIX_INDICATOR_SET_COLOR(14, 0x80, 0x00, 0x80);
     } else {
-    RGB_MATRIX_INDICATOR_SET_COLOR(13, 0xFF, 0xFF, 0xFF);
-    RGB_MATRIX_INDICATOR_SET_COLOR(14, 0xFF, 0xFF, 0xFF);
+        RGB_MATRIX_INDICATOR_SET_COLOR(13, 0xFF, 0xFF, 0xFF);
+        RGB_MATRIX_INDICATOR_SET_COLOR(14, 0xFF, 0xFF, 0xFF);
     }
 
     if (TOGGLE_MOUSE_RIGHT_CLICK) {
@@ -149,11 +149,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(KC_F1 + (keycode - KC_1));    // Convert number to F-key
                 return false;
             } else if (get_mods() == MOD_BIT(KC_LALT) && keycode == KC_4) {
-                        if (record->event.pressed) {
-                            tap_code16(LALT(KC_F4));
-                        }
-                        return false;
-                    }
+                if (record->event.pressed) {
+                    tap_code16(LALT(KC_F4));
+                }
+                return false;
+            }
             return true;
 
         case TG_DBG:
@@ -253,7 +253,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         default:
             return true;
     }
-    return true;
 }
 
 void matrix_scan_user(void) {
