@@ -64,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_TRNS, TG_DBG, TG_NUL,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INSERT, KC_MPRV,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, NK_TOGG, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MOUSE_RIGHT_CLICK,          KC_TRNS, KC_MPLY,
-		KC_TRNS,          RGB_TOG, RGB_MOD, RGB_RMOD,RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, SHIFT_SPAM, KC_TRNS, KC_PRINT_SCREEN, KC_MNXT,
+		KC_TRNS,          UG_TOGG, KC_TRNS, KC_TRNS ,KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, SHIFT_SPAM, KC_TRNS, KC_PRINT_SCREEN, KC_MNXT,
 		KC_TRNS, KC_TRNS, KC_TRNS,                   KC_PASS,                            KC_RCTL, KC_TRNS,          KC_AUDIO_VOL_DOWN, KC_HOME, KC_AUDIO_VOL_UP
 	)//
 };
@@ -157,9 +157,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 TOGGLE_MOUSE_RIGHT_CLICK = !TOGGLE_MOUSE_RIGHT_CLICK;
                 uprintf("TOGGLE_MOUSE_RIGHT_CLICK is now: %d\n", TOGGLE_MOUSE_RIGHT_CLICK);
                 if (TOGGLE_MOUSE_RIGHT_CLICK) {
-                    register_code(KC_MS_BTN2);
+                    register_code(MS_BTN2);
                 } else if (!TOGGLE_MOUSE_RIGHT_CLICK) {
-                    unregister_code(KC_MS_BTN2);
+                    unregister_code(MS_BTN2);
                 }
             }
             return false;
