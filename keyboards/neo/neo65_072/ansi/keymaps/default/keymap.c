@@ -17,11 +17,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
+#if __has_include("secrets.h")
+#include "secrets.h"
+#else
+    #define SECRETS "put-your-own-if-you-wish"
+#endif
+
 enum custom_keycodes {
     TG_NUL = SAFE_RANGE,
     TG_DBG = SAFE_RANGE + 1,
     SHIFT_SPAM = SAFE_RANGE + 2,
     MOUSE_RIGHT_CLICK = SAFE_RANGE + 3,
+    KC_PASS = SAFE_RANGE + 4,
 };
 
 #define CAPS_LED  31
@@ -58,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INSERT, KC_MPRV,
 		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, NK_TOGG, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MOUSE_RIGHT_CLICK,          KC_TRNS, KC_MPLY,
 		KC_TRNS,          RGB_TOG, RGB_MOD, RGB_RMOD,RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, SHIFT_SPAM, KC_TRNS, KC_PRINT_SCREEN, KC_MNXT,
-		KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS,                            KC_RCTL, KC_TRNS,          KC_AUDIO_VOL_DOWN, KC_HOME, KC_AUDIO_VOL_UP
+		KC_TRNS, KC_TRNS, KC_TRNS,                   KC_PASS,                            KC_RCTL, KC_TRNS,          KC_AUDIO_VOL_DOWN, KC_HOME, KC_AUDIO_VOL_UP
 	)//
 };
 
@@ -128,6 +135,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
+
+        case KC_PASS:
+            if (record->event.pressed) {
+                SEND_STRING(SECRETS);
+            }
+            return false;
 
         case SHIFT_SPAM:
             if (record->event.pressed) {

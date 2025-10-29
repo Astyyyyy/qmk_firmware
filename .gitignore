@@ -128,3 +128,6 @@ compile_commands.json
 via*.json
 /keyboards/**/keymaps/via/*
 /keyboards/**/keymaps/vial/*
+
+# dont leak secret strings (e.g passwords)
+keyboards/neo/neo65_072/ansi/secrets.h
