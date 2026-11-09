@@ -1,7 +1,7 @@
 {
     "keyboard_name": "NEO65 ANSI",
     "manufacturer":"NEO Studio",
-    "url": "",
+    "url": "https://github.com/Astyyyyy/qmk_firmware",
     "maintainer": "NEO Studio",
     "usb": {
         "vid": "0x4E45",
