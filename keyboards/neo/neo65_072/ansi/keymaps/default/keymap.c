@@ -44,7 +44,10 @@ static bool TOGGLE_MOUSE_RIGHT_CLICK = false;
 
 static bool TOGGLE_DEBUG = false;
 
+// A/D
 static bool a_held, d_held, a_scrip, d_scrip = 0;
+// W/S
+static bool a2_held, d2_held, a2_scrip, d2_scrip = 0;
 
 static bool TOGGLE_SHIFT_SPAM = false;
 static bool shift_pressed = false;
@@ -207,6 +210,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                         d_scrip = false;
                         unregister_code(KC_D);
                     }
+                    if (a2_scrip) {
+                        a2_scrip = false;
+                        unregister_code(KC_W);
+                    }
+                    if (d2_scrip) {
+                        d2_scrip = false;
+                        unregister_code(KC_S);
+                    }
                     uprintf("Toggled null movement OFF\n");
                     //rgb_matrix_sethsv_noeeprom(HSV_WHITE);
                 } else {
@@ -269,6 +280,61 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
+
+        case KC_W:
+            if (TOGGLE_NULL) {
+                if (record->event.pressed) {
+                    d2_held = true;
+                    if (a2_scrip) {
+                        a2_scrip = false;
+                        unregister_code(KC_S);
+                    }
+                    if (!d2_scrip) {
+                        d2_scrip = true;
+                        register_code(KC_W);
+                    }
+                } else {
+                    d2_held = false;
+                    if (d2_scrip) {
+                        d2_scrip = false;
+                        unregister_code(KC_W);
+                    }
+                    if (a2_held && !a2_scrip) {
+                        a2_scrip = true;
+                        register_code(KC_S);
+                    }
+                }
+                return false;
+            }
+            return true;
+
+        case KC_S:
+            if (TOGGLE_NULL) {
+                if (record->event.pressed) {
+                    a2_held = true;
+                    if (d2_scrip) {
+                        d2_scrip = false;
+                        unregister_code(KC_W);
+                    }
+                    if (!a2_scrip) {
+                        a2_scrip = true;
+                        register_code(KC_S);
+                    }
+                } else {
+                    a2_held = false;
+                    if (a2_scrip) {
+                        a2_scrip = false;
+                        unregister_code(KC_S);
+                    }
+                    if (d2_held && !d2_scrip) {
+                        d2_scrip = true;
+                        register_code(KC_W);
+                    }
+                }
+                return false;
+            }
+            return true;
+
         // handle other keycodes...
         default:
             return true;
